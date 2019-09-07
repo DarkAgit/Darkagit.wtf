@@ -1,0 +1,6 @@
+registerModule(Flight, Movement) {
+   
+    func onMove {
+        player.jump
+    }
+}
