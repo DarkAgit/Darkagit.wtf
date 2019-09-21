@@ -1,0 +1,69 @@
+var scriptName = "FlySpartan";
+var scriptAuthor = "LaVacheMilka";
+var scriptVersion = 0.1;
+
+// Converts from degrees to radians.
+ Math.radians = function(degrees) {
+    return degrees * Math.PI / 180;
+  };
+   
+  // Converts from radians to degrees.
+  Math.degrees = function(radians) {
+    return radians * 180 / Math.PI;
+  };
+
+function FlyModule() {
+  var ticks = 0;
+    this.getName = function() {
+        return "FlySpartan";
+    }
+
+    this.getDescription = function() {
+        return "Fly for Spartan"
+    }
+
+    this.getCategory = function() {
+        return "Movement";
+    }
+
+    this.onMotion = function() {
+        mc.thePlayer.motionY = 0;
+        mc.timer.timerSpeed = 2.5;
+
+        if(mc.gameSettings.keyBindJump.isKeyDown())
+            mc.thePlayer.motionY = 0;
+
+        if(mc.gameSettings.keyBindSneak.isKeyDown())
+            mc.thePlayer.motionY = 0;
+
+        if(mc.gameSettings.keyBindForward.isKeyDown()) {
+
+            var yaw = Math.radians(mc.thePlayer.rotationYaw);
+
+            mc.thePlayer.motionX = -Math.sin(yaw) * 0.255;
+            mc.thePlayer.motionZ = Math.cos(yaw) * 0.255;
+   } else {
+            mc.thePlayer.motionX = 0.0;
+            mc.thePlayer.motionZ = 0.0;
+            mc.timer.timerSpeed = 2.5;
+            mc.thePlayer.setSprinting(true);
+        }
+}
+    this.onDisable = function() {
+        mc.timer.timerSpeed = 1;
+        mc.thePlayer.motionX =0;
+        mc.thePlayer.motionY =0;
+        mc.thePlayer.motionZ =0;
+    }
+}
+
+var flyModule = new FlyModule();
+var devModuleClient;
+
+function onEnable() {
+    flyModuleClient = moduleManager.registerModule(flyModule);
+}
+
+function onDisable() {
+    moduleManager.unregisterModule(flyModuleClient);
+}
